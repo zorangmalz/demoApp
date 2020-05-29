@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "350344180718",
+    "firebase_url": "https://blockersdemo.firebaseio.com",
+    "project_id": "blockersdemo",
+    "storage_bucket": "blockersdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350344180718:android:91b5adf38539219b1654ff",
+        "android_client_info": {
+          "package_name": "com.blockersapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350344180718-4uqnjoc3oq1of2gupsk7ous4i89ar2v8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKEbXz5PtF7b0zUCG2iw5f_Nwzm79Cw78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350344180718-4uqnjoc3oq1of2gupsk7ous4i89ar2v8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

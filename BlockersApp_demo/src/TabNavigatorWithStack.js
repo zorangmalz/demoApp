@@ -9,6 +9,7 @@ import CommunityScreen from 'BlockersApp/src/CommunityScreen';
 import StatusScreen from 'BlockersApp/src/StatusScreen';
 import ChallengeScreen from 'BlockersApp/src/ChallengeScreen';
 import MyPageScreen from 'BlockersApp/src/MyPageScreen';
+import AlertScreen from 'BlockersApp/src/AlertScreen';
 import IconWithBadge from './IconWithBadge';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -23,7 +24,7 @@ const HomeStack=createStackNavigator(
     {
         defaultNavigationOptions:({navigation})=>({
             title:"Home",
-            headerRight:()=> <Icon name='ios-home' style={{fontSize:20,paddingRight:20}}/>,
+            headerRight:()=> <Icon name='ios-alert' style={{fontSize:20,paddingRight:20}}/>,
            
 
         }),
