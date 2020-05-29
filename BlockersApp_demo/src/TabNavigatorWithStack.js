@@ -12,21 +12,21 @@ import MyPageScreen from 'BlockersApp/src/MyPageScreen';
 import AlertScreen from 'BlockersApp/src/AlertScreen';
 import IconWithBadge from './IconWithBadge';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { TouchableOpacity, TouchableHighlight } from 'react-native-gesture-handler';
+import { Text, View,Button} from 'react-native';
 
 const HomeIconWithBadge = props => {
   return <IconWithBadge {...props} badgeCount={3} />;
 };
-
+ 
 const HomeStack=createStackNavigator(
     {
-        HomeScreen
+        Home:HomeScreen,
+        Details:AlertScreen
     },
     {
         defaultNavigationOptions:({navigation})=>({
-            title:"Home",
-            headerRight:()=> <Icon name='ios-alert' style={{fontSize:20,paddingRight:20}}/>,
-           
-
+            title:"Home",      
         }),
     }
 )
@@ -76,8 +76,7 @@ const TabNavigator = createBottomTabNavigator(
     Challenge:ChallengeStack,
     Status:StatusStack,
     Community:CommunityStack,
-    MyPage:MyPageStack
-    
+    MyPage:MyPageStack,
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
@@ -91,7 +90,6 @@ const TabNavigator = createBottomTabNavigator(
           iconName = 'ios-home';
         } else if (routeName === 'Challenge') {
           iconName = 'ios-star-outline';
-        
         } else if (routeName === 'Status') {
           iconName = 'ios-stats';
         }else if (routeName === 'Community') {
@@ -100,7 +98,6 @@ const TabNavigator = createBottomTabNavigator(
           }else if (routeName === 'MyPage') {
             iconName = 'ios-person';
           }
-
         return (
           <IconComponent
             name={iconName}
@@ -132,5 +129,6 @@ const App = createStackNavigator({
       headerShown: false,
     },
   },
+  
 });
 export default createAppContainer(App);
