@@ -13,10 +13,11 @@ import {
   Dimensions
 } from 'react-native';
 
-import {Header, CheckBox} from 'react-native-elements';
+import {Header} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconIcon from 'react-native-vector-icons/Ionicons';
-import { FlatList } from 'react-native-gesture-handler';
+import IconIcon from 'react-native-vector-icons/FontAwesome';
+import DaumPostcode from 'react-daum-postcode';
+import WebView from 'react-native-webview';
 
 const styles = StyleSheet.create({
   viewContainer: {
@@ -51,12 +52,70 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 7,
       backgroundColor: '#48d1cc'
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    padding: 18
   }
 });
 
 const ChallengeApply2 = () => {
   const [token, setToken] = useState(0);
-  const [address, setAddress] = useState('');
+  const [addr, setAddr] = useState('');
+  const [extraAddr, setExtraAddr] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchAddr, setSearchAddr]=useState('');
+
+  const searchScreen = () => {
+    <WebView style={{flex:1}} source={{ html :
+    
+    <html>
+      <input type="text" id="sample6_postcode" placeholder="우편번호" />
+      <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" />
+      <input type="text" id="sample6_address" placeholder="주소" />
+      <input type="text" id="sample6_detailAddress" placeholder="상세주소" />
+      <input type="text" id="sample6_extraAddress" placeholder="참고항목" />
+    </html>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    if(data.userSelectedType === 'R'){
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        document.getElementById("sample6_extraAddress").value = extraAddr;
+                
+                    } else {
+                        document.getElementById("sample6_extraAddress").value = '';
+                    }
+                    document.getElementById('sample6_postcode').value = data.zonecode;
+                    document.getElementById("sample6_address").value = addr;
+                    document.getElementById("sample6_detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+  }}/>};
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -64,11 +123,70 @@ const ChallengeApply2 = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollContainer}>
+          <Modal
+            animationType="slide"
+            transparent = {true}
+            visible={modalVisible}
+          >
+            <View style={styles.modalView}>
+              <IconIcon 
+                name="close" 
+                size={30} 
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={{alignSelf: 'flex-start',
+                  marginLeft: 10
+                }} 
+              />
+              <Text style={[styles.fontSubTitle, {
+                alignSelf: 'flex-start',
+                marginTop: 10
+              }]}>지번, 도로명을 입력하세요</Text>
+              <View style={{
+                flexDirection: 'row',
+                alignSelf: 'stretch',
+                marginLeft: 10,
+                marginRight: 10,
+                marginTop: 10
+              }}>
+                <TextInput 
+                  onChange={target => setSearchAddr(target)}
+                  placeholder="예) 킹스로 145 또는 블로커스사무실"
+                  textAlign="left"
+                  onSubmitEditing={Keyboard.dismiss}
+                  style={{
+                    alignSelf: '',
+                    borderWidth:0.3,
+                    borderColor: '#707070',
+                    borderRadius: 1,
+                    marginRight: 7,
+                    padding: 5,
+                    fontSize: 15,
+                    height: 30,
+                    alignSelf: 'stretch',
+                    backgroundColor: '#ffffff'
+                  }}
+                />
+                <TouchableOpacity onPress={searchScreen}>
+                  <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 0.3,
+                    borderColor: '#707070',
+                    borderRadius: 1,
+                    padding: 10
+                  }}>
+                    <IconIcon name="search" size={25} style={{ color: '#707070' }} />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           <Header
             leftComponent={<Text style = {{ color: '#79808c', fontSize: 25 }}>Challenge</Text>}
             rigthComponent={
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <IconIcon name="warning" size={5} style={{backgroundColor: "#707070" }} />
               </View>
             }
             containerStyle={{width: Dimensions.get('window').width, borderBottomColor: '#d3d3d3', backgroundColor: '#ffffff' }}
@@ -134,6 +252,8 @@ const ChallengeApply2 = () => {
                 marginRight: 5,
                 borderWidth: 1,
                 borderColor: '#707070',
+                backgroundColor: '#ffffff',
+                borderRadius: 5,
                 fontSize: 15
               }}
             />
@@ -159,18 +279,29 @@ const ChallengeApply2 = () => {
                   marginRight: 5,
                   borderWidth: 1,
                   borderColor: '#707070',
+                  backgroundColor: '#ffffff',
+                  borderRadius: 5,
                   fontSize: 15,
                   marginBottom: 9
                 }}
               />
               <TouchableOpacity style={{alignSelf:'center', marginBottom: 9}}>
                 <View style={styles.buttonStyle}>
-                  <Text style={[styles.fontText, { color: 'white', fontWeight: 'bold', marginLeft: 18, marginRight: 18}]}>검색</Text>
+                  <Text 
+                    onPress={() => {
+                      setModalVisible(true);
+                    }}
+                    style={[styles.fontText, { 
+                    color: 'white', 
+                    fontWeight: 'bold', 
+                    marginLeft: 18, 
+                    marginRight: 18}]}
+                  >검색</Text>
                 </View>
               </TouchableOpacity>
             </View>
             <TextInput
-              onChangeText={text => setAddress(text)}
+              onChangeText={text => setAddr(text)}
               placeholder="주소"
               textAlign="left"
               onSubmitEditing={Keyboard.dismiss}
@@ -179,12 +310,14 @@ const ChallengeApply2 = () => {
                 height: 40,
                 borderWidth: 1,
                 borderColor: '#707070',
+                backgroundColor: '#ffffff',
+                borderRadius: 5,
                 fontSize: 15,
                 marginBottom: 9
               }}
             />
             <TextInput
-              onChangeText={text => setAddress(text)}
+              onChangeText={text => setExtraAddr(text)}
               placeholder="상세주소"
               textAlign="left"
               onSubmitEditing={Keyboard.dismiss}
@@ -193,6 +326,8 @@ const ChallengeApply2 = () => {
                 height: 40,
                 borderWidth: 1,
                 borderColor: '#707070',
+                backgroundColor: '#ffffff',
+                borderRadius: 5,
                 fontSize: 15,
                 marginBottom: 9
               }}

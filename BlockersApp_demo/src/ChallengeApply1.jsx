@@ -16,16 +16,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconIcon from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
 
-//상단 아이콘
-const headerIcon = () => {
-  return (
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="warning" style={{width: '20', height: '20', color: "#79808c"}} />
-          <Icon name="ios-notifications" style={{width: 20, height: 20, color: "#79808c"}} />
-      </View>
-  );
-}
-
 const styles = StyleSheet.create({
   viewContainer: {
       backgroundColor: 'white',

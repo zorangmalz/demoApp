@@ -14,10 +14,8 @@ import {
     Keyboard
 } from 'react-native';
 import { ActivityIndicator } from 'react-native';
-import {styles, headerIcon} from './challenge 1-2'
 import { Header } from 'react-native-elements'
 import Icon from 'react=native-vector-icons/Ionicons';
-import {stepMethod} from './ChallengeApply1-1';
 /*
 필요한 기능
 1. 사용자가 비밀번호를 입력함
@@ -26,39 +24,112 @@ import {stepMethod} from './ChallengeApply1-1';
 3. 비밀번호가 틀렸을 시 다시 입력
 */
 
+const styles = StyleSheet.create({
+    viewContainer: {
+        backgroundColor: 'white',
+    },
+    scrollContainer: {
+        backgroundColor: "#ffffff",
+        paddingRight: 18,
+        paddingLeft: 18,
+    },
+    box: {
+        marginTop: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderColor: "#48d1cc",
+        borderWidth: 3,
+        alignItems: 'center',
+    },
+    fontText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#79808c'
+    },
+    fontSubTitle: {
+        fontSize: 21,
+        fontWeight: '600',
+        marginLeft: 10,
+        color: '#79808c'
+    },
+    buttonStyle: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 7,
+        backgroundColor: '#48d1cc'
+    }
+});
+
 const passwordInput = () => {
-    return(
-        <View style={styles.viewContainer}>
-            <Header 
-                leftComponent={{text: 'Challenge', style: {color: 'black', fontSize: 25}}}
-                rightComponent={headerIcon}
-                style={{borderBottomColor: '#d3d3d3'}}
-            />
-            <ScrollView style={styles.scrollContainer}>
-                <Text style={styles.fontText, {
-                    fontSize: 21, 
-                    color: '#707070', 
-                    fontWeight: 'bold',
-                    alignSelf: 'flex-start'
-                }}>비밀번호 입력</Text>>
-                <View style={{
-                    marginTop: 15,
-                    marginBottom: 15
-                }}>
-                    {stepMethod}
-                </View>
-                <KeyboardAvoidingView 
-                    behavior={Platform.OS == "ios" ? "padding" : "height"}
-                >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View>
-                            <Text></Text>
+    return (
+        <>
+            <StatusBar barStyle="light-content" />
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
+                <ScrollView
+                    contentInsetAdjustmentBehavior="automatic"
+                    style={styles.scrollContainer}>
+                    <Text style={styles.fontText, {
+                        fontSize: 21,
+                        color: '#707070',
+                        fontWeight: 'bold',
+                        alignSelf: 'flex-start'
+                    }}>비밀번호 입력</Text>
+                    <View style={{
+                        marginTop: 15,
+                        marginBottom: 15,
+                        marginLeft: 10
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'stretch',
+                            justifyContent: 'center'
+                        }}>
+                            <View style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <Icon name="numeric-1-circle" size={30} style={{ color: '#707070' }} />
+                                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>참여방법</Text>
+                            </View>
+                            <View style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginLeft: 70,
+                                marginRight: 60
+                            }}>
+                                <Icon name="numeric-2-circle" size={30} style={{ color: '#707070' }} />
+                                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>챌린지 설정</Text>
+                            </View>
+                            <View style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}>
+                                <Icon name="numeric-3-circle" size={30} style={{ color: '#707070' }} />
+                                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>비밀번호 입력</Text>
+                            </View>
                         </View>
-                        <Button title="다음" onPress ={() => navigation.navigate('')}/>
-                    </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
-            </ScrollView>
-        </View>
+                    </View>
+                    <View>
+                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+                            <IconIcon name='minus' size={50} />
+                            <IconIcon name='minus' size={50} style={{ marginLeft: 20, marginRight: 10 }} />
+                            <IconIcon name='minus' size={50} style={{ marginRight: 20, marginLeft: 10 }} />
+                            <IconIcon name='minus' size={50} />
+                        </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={{ marginTop: 30, alignSelf: 'center' }}>
+                        <View style={[styles.buttonStyle,
+                        { width: 132, height: 35 }]
+                        }>
+                            <Text style={styles.fontText, {
+                                fontSize: 21,
+                                color: 'white'
+                            }}>다음</Text>
+                        </View>
+                    </TouchableOpacity>
+                </ScrollView>
+            </SafeAreaView>
+        </>
     );
 }
 
