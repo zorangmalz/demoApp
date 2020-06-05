@@ -1,4 +1,4 @@
-import React, {useState, useReducer, createContext, useContext, useRef } from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,18 +6,18 @@ import {
   View,
   Text,
   StatusBar,
-  Keyboard,
-  TextInput,
-  Image,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Keyboard,
+  Modal,
 } from 'react-native';
 
-import {Header} from 'react-native-elements';
+
+import {Header, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconIcon from 'react-native-vector-icons/FontAwesome';
-import DaumPostcode from 'react-daum-postcode';
-import WebView from 'react-native-webview';
+import { TextInput, DefaultTheme } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 
 const styles = StyleSheet.create({
   viewContainer: {
@@ -53,68 +53,40 @@ const styles = StyleSheet.create({
       borderRadius: 7,
       backgroundColor: '#48d1cc'
   },
+  hairline: {
+    backgroundColor: '#707070',
+    width: 100,
+    height: 5,
+    borderRadius: 5,
+    zIndex: 1
+  },
+  line : {
+    width: 50,
+    height: 2,
+    marginRight: 10,
+    marginLeft: 10,
+    backgroundColor: '#707070'
+  },
+  passicon: {
+    marginRight: 21.5,
+    marginLeft: 21.5
+  },
   modalView: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#ffffff',
     padding: 18
-  }
+  },
 });
 
-const ChallengeApply2 = () => {
+const challengeApply2 = () => {
   const [token, setToken] = useState(0);
   const [addr, setAddr] = useState('');
   const [extraAddr, setExtraAddr] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [searchAddr, setSearchAddr]=useState('');
-
-  const searchScreen = () => {
-    <WebView style={{flex:1}} source={{ html :
-    
-    <html>
-      <input type="text" id="sample6_postcode" placeholder="우편번호" />
-      <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" />
-      <input type="text" id="sample6_address" placeholder="주소" />
-      <input type="text" id="sample6_detailAddress" placeholder="상세주소" />
-      <input type="text" id="sample6_extraAddress" placeholder="참고항목" />
-    </html>
-    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-        function sample6_execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    var addr = ''; // 주소 변수
-                    var extraAddr = ''; // 참고항목 변수
-                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                        addr = data.roadAddress;
-                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                        addr = data.jibunAddress;
-                    }
-
-                    if(data.userSelectedType === 'R'){
-                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                            extraAddr += data.bname;
-                        }
-                        if(data.buildingName !== '' && data.apartment === 'Y'){
-                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                        }
-                        if(extraAddr !== ''){
-                            extraAddr = ' (' + extraAddr + ')';
-                        }
-                        document.getElementById("sample6_extraAddress").value = extraAddr;
-                
-                    } else {
-                        document.getElementById("sample6_extraAddress").value = '';
-                    }
-                    document.getElementById('sample6_postcode').value = data.zonecode;
-                    document.getElementById("sample6_address").value = addr;
-                    document.getElementById("sample6_detailAddress").focus();
-                }
-            }).open();
-        }
-    </script>
-  }}/>};
+  const HTML = require('demoApp/src/address.html')
 
   return (
     <>
@@ -125,63 +97,12 @@ const ChallengeApply2 = () => {
           style={styles.scrollContainer}>
           <Modal
             animationType="slide"
-            transparent = {true}
+            transparent={true}
             visible={modalVisible}
           >
-            <View style={styles.modalView}>
-              <IconIcon 
-                name="close" 
-                size={30} 
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-                style={{alignSelf: 'flex-start',
-                  marginLeft: 10
-                }} 
-              />
-              <Text style={[styles.fontSubTitle, {
-                alignSelf: 'flex-start',
-                marginTop: 10
-              }]}>지번, 도로명을 입력하세요</Text>
-              <View style={{
-                flexDirection: 'row',
-                alignSelf: 'stretch',
-                marginLeft: 10,
-                marginRight: 10,
-                marginTop: 10
-              }}>
-                <TextInput 
-                  onChange={target => setSearchAddr(target)}
-                  placeholder="예) 킹스로 145 또는 블로커스사무실"
-                  textAlign="left"
-                  onSubmitEditing={Keyboard.dismiss}
-                  style={{
-                    alignSelf: '',
-                    borderWidth:0.3,
-                    borderColor: '#707070',
-                    borderRadius: 1,
-                    marginRight: 7,
-                    padding: 5,
-                    fontSize: 15,
-                    height: 30,
-                    alignSelf: 'stretch',
-                    backgroundColor: '#ffffff'
-                  }}
-                />
-                <TouchableOpacity onPress={searchScreen}>
-                  <View style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderWidth: 0.3,
-                    borderColor: '#707070',
-                    borderRadius: 1,
-                    padding: 10
-                  }}>
-                    <IconIcon name="search" size={25} style={{ color: '#707070' }} />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <WebView
+              source = {HTML}
+            />
           </Modal>
           <Header
             leftComponent={<Text style = {{ color: '#79808c', fontSize: 25 }}>Challenge</Text>}
@@ -205,32 +126,25 @@ const ChallengeApply2 = () => {
           }}>
             <View style={{
               flexDirection: 'row',
-              alignItems: 'stretch',
-              justifyContent: 'center'
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
             }}>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Icon name="numeric-1-circle" size={30} style={{ color: '#707070' }} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>참여방법</Text>
-              </View>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 70,
-                marginRight: 60
-              }}>
-                <Icon name="numeric-2-circle" size={30} style={{ color: '#707070' }} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>챌린지 설정</Text>
-              </View>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Icon name="numeric-3-circle" size={30} style={{ color: '#707070' }} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>비밀번호 입력</Text>
-              </View>
+              <Icon name="numeric-1-circle" size={30} style={{ color: '#707070', zIndex: 2 }} />
+              <View style={styles.hairline} />
+              <Icon name="numeric-2-circle" size={30} style={{ color: '#48d1cc', zIndex: 2 }} />
+              <View style={styles.hairline} />
+              <Icon name="numeric-3-circle" size={30} style={{ color: '#707070', zIndex: 2 }} />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 3
+            }}>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070', marginLeft: 7}]}>참여방법</Text>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070' , marginLeft: 75, marginRight: 60}]}>챌린지 설정</Text>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070'}]}>비밀번호 입력</Text>
             </View>
           </View>
           <Text style={[styles.fontText, {
@@ -289,7 +203,7 @@ const ChallengeApply2 = () => {
                 <View style={styles.buttonStyle}>
                   <Text 
                     onPress={() => {
-                      setModalVisible(true);
+                      setModalVisible(!modalVisible);
                     }}
                     style={[styles.fontText, { 
                     color: 'white', 
@@ -349,5 +263,6 @@ const ChallengeApply2 = () => {
   );
 };
 
-export default ChallengeApply2;
+export default challengeApply2;
+
 

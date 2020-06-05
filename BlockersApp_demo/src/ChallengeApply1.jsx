@@ -13,7 +13,7 @@ import {
 
 import {Header, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconIcon from 'react-native-vector-icons/Ionicons';
+import IconIcon from 'react-native-vector-icons/FontAwesome';
 import { FlatList } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
@@ -49,6 +49,13 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 7,
       backgroundColor: '#48d1cc'
+  },
+  hairline: {
+    backgroundColor: '#707070',
+    width: 100,
+    height: 5,
+    borderRadius: 5,
+    zIndex: 1
   }
 });
 
@@ -133,32 +140,25 @@ const ChallengeApply = () => {
           }}>
             <View style={{
               flexDirection: 'row',
-              alignItems: 'stretch',
-              justifyContent:'center'
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
             }}>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Icon name="numeric-1-circle" size={30} style={{color: '#707070'}} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>참여방법</Text>
-              </View>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 70,
-                marginRight: 60
-              }}>
-                <Icon name="numeric-2-circle" size={30} style={{color: '#707070'}} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>챌린지 설정</Text>
-              </View>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Icon name="numeric-3-circle" size={30} style={{color: '#707070'}} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>비밀번호 입력</Text>
-              </View>
+              <Icon name="numeric-1-circle" size={30} style={{ color: '#48d1cc', zIndex: 2 }} />
+              <View style={styles.hairline} />
+              <Icon name="numeric-2-circle" size={30} style={{ color: '#707070', zIndex: 2 }} />
+              <View style={styles.hairline} />
+              <Icon name="numeric-3-circle" size={30} style={{ color: '#707070', zIndex: 2 }} />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 3
+            }}>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070', marginLeft: 7}]}>참여방법</Text>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070' , marginLeft: 75, marginRight: 60}]}>챌린지 설정</Text>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070'}]}>비밀번호 입력</Text>
             </View>
           </View>
           <Text style={[styles.fontText, {
