@@ -83,6 +83,8 @@ target 'BlockersApp' do
 
   pod 'react-native-nmap', :path => '../node_modules/react-native-nmap'
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   target 'BlockersAppTests' do
     inherit! :complete
     # Pods for testing
