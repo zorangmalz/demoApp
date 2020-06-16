@@ -1,4 +1,4 @@
-import React, {useState, useReducer, createContext, useContext, useRef } from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,17 +6,18 @@ import {
   View,
   Text,
   StatusBar,
-  Keyboard,
-  TextInput,
-  Image,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Keyboard,
+  Modal,
 } from 'react-native';
+
 
 import {Header, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconIcon from 'react-native-vector-icons/Ionicons';
-import { FlatList } from 'react-native-gesture-handler';
+import IconIcon from 'react-native-vector-icons/FontAwesome';
+import { TextInput, DefaultTheme } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 
 const styles = StyleSheet.create({
   viewContainer: {
@@ -51,12 +52,42 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 7,
       backgroundColor: '#48d1cc'
-  }
+  },
+  hairline: {
+    backgroundColor: '#707070',
+    width: 100,
+    height: 5,
+    borderRadius: 5,
+    zIndex: 1
+  },
+  line : {
+    width: 50,
+    height: 2,
+    marginRight: 10,
+    marginLeft: 10,
+    backgroundColor: '#707070'
+  },
+  passicon: {
+    marginRight: 21.5,
+    marginLeft: 21.5
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    padding: 18
+  },
 });
 
-const ChallengeApply2 = () => {
+const challengeApply2 = () => {
   const [token, setToken] = useState(0);
-  const [address, setAddress] = useState('');
+  const [addr, setAddr] = useState('');
+  const [extraAddr, setExtraAddr] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchAddr, setSearchAddr]=useState('');
+  const HTML = require('demoApp/src/address.html')
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -64,11 +95,19 @@ const ChallengeApply2 = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollContainer}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+          >
+            <WebView
+              source = {HTML}
+            />
+          </Modal>
           <Header
             leftComponent={<Text style = {{ color: '#79808c', fontSize: 25 }}>Challenge</Text>}
             rigthComponent={
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <IconIcon name="warning" size={5} style={{backgroundColor: "#707070" }} />
               </View>
             }
             containerStyle={{width: Dimensions.get('window').width, borderBottomColor: '#d3d3d3', backgroundColor: '#ffffff' }}
@@ -87,32 +126,25 @@ const ChallengeApply2 = () => {
           }}>
             <View style={{
               flexDirection: 'row',
-              alignItems: 'stretch',
-              justifyContent: 'center'
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
             }}>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Icon name="numeric-1-circle" size={30} style={{ color: '#707070' }} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>참여방법</Text>
-              </View>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 70,
-                marginRight: 60
-              }}>
-                <Icon name="numeric-2-circle" size={30} style={{ color: '#707070' }} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>챌린지 설정</Text>
-              </View>
-              <View style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Icon name="numeric-3-circle" size={30} style={{ color: '#707070' }} />
-                <Text style={[styles.fontText, { fontSize: 12, color: '#707070' }]}>비밀번호 입력</Text>
-              </View>
+              <Icon name="numeric-1-circle" size={30} style={{ color: '#707070', zIndex: 2 }} />
+              <View style={styles.hairline} />
+              <Icon name="numeric-2-circle" size={30} style={{ color: '#48d1cc', zIndex: 2 }} />
+              <View style={styles.hairline} />
+              <Icon name="numeric-3-circle" size={30} style={{ color: '#707070', zIndex: 2 }} />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 3
+            }}>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070', marginLeft: 7}]}>참여방법</Text>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070' , marginLeft: 75, marginRight: 60}]}>챌린지 설정</Text>
+              <Text style={[styles.fontText, { fontSize: 12, color: '#707070'}]}>비밀번호 입력</Text>
             </View>
           </View>
           <Text style={[styles.fontText, {
@@ -134,6 +166,8 @@ const ChallengeApply2 = () => {
                 marginRight: 5,
                 borderWidth: 1,
                 borderColor: '#707070',
+                backgroundColor: '#ffffff',
+                borderRadius: 5,
                 fontSize: 15
               }}
             />
@@ -159,18 +193,29 @@ const ChallengeApply2 = () => {
                   marginRight: 5,
                   borderWidth: 1,
                   borderColor: '#707070',
+                  backgroundColor: '#ffffff',
+                  borderRadius: 5,
                   fontSize: 15,
                   marginBottom: 9
                 }}
               />
               <TouchableOpacity style={{alignSelf:'center', marginBottom: 9}}>
                 <View style={styles.buttonStyle}>
-                  <Text style={[styles.fontText, { color: 'white', fontWeight: 'bold', marginLeft: 18, marginRight: 18}]}>검색</Text>
+                  <Text 
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                    }}
+                    style={[styles.fontText, { 
+                    color: 'white', 
+                    fontWeight: 'bold', 
+                    marginLeft: 18, 
+                    marginRight: 18}]}
+                  >검색</Text>
                 </View>
               </TouchableOpacity>
             </View>
             <TextInput
-              onChangeText={text => setAddress(text)}
+              onChangeText={text => setAddr(text)}
               placeholder="주소"
               textAlign="left"
               onSubmitEditing={Keyboard.dismiss}
@@ -179,12 +224,14 @@ const ChallengeApply2 = () => {
                 height: 40,
                 borderWidth: 1,
                 borderColor: '#707070',
+                backgroundColor: '#ffffff',
+                borderRadius: 5,
                 fontSize: 15,
                 marginBottom: 9
               }}
             />
             <TextInput
-              onChangeText={text => setAddress(text)}
+              onChangeText={text => setExtraAddr(text)}
               placeholder="상세주소"
               textAlign="left"
               onSubmitEditing={Keyboard.dismiss}
@@ -193,6 +240,8 @@ const ChallengeApply2 = () => {
                 height: 40,
                 borderWidth: 1,
                 borderColor: '#707070',
+                backgroundColor: '#ffffff',
+                borderRadius: 5,
                 fontSize: 15,
                 marginBottom: 9
               }}
@@ -214,5 +263,6 @@ const ChallengeApply2 = () => {
   );
 };
 
-export default ChallengeApply2;
+export default challengeApply2;
+
 
