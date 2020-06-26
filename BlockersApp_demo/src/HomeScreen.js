@@ -1,13 +1,30 @@
 import React from 'react';
 import {StyleSheet, Text, View,ScrollView,Image,Button} from 'react-native';
-
+import AlertScreen from 'BlockersApp/src/AlertScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, TouchableHighlight } from 'react-native-gesture-handler';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
 
-
+function AlertIcon(props){
+  return(
+    <TouchableHighlight onPress={()=>navigation.navigate("Details")}>
+      <Icon  name='ios-alert' style={{fontSize:20,paddingLeft:10}}/>
+    </TouchableHighlight>
+    
+  )
+}
 class HomeScreen extends React.Component {
+
+  static navigationOptions=({navigation,screenProps}) =>({
+    title:"Home",
+    headerRight:()=>(
+        <TouchableHighlight onPress={()=>navigation.navigate("Details")}>
+      <Icon name="ios-alert" style={{fontSize:20,paddingLeft:10}}/>
+        </TouchableHighlight>
+    )
+  });
   constructor(props){
     super(props);
     this.state={
@@ -20,11 +37,15 @@ class HomeScreen extends React.Component {
       ]
     }
   }
+  // _goToChallenge() {
+  //   this.props.navigation.replace("AlertScreen");
+  // };
   render() {
     const state = this.state;
     return (
       
       <View style={styles.container}>
+      
         <ScrollView>
           <View style={styles.containerStatus}>
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
@@ -64,6 +85,7 @@ class HomeScreen extends React.Component {
           <Button 
         title="참여하기"
         color="#77c6b8"
+        onPress={()=>this.props.navigation.navigate("Details")}
         textStyle={{
           fontSize:40
         }}
@@ -92,9 +114,7 @@ class HomeScreen extends React.Component {
     );
     
   }
-  // _goToChallenge() {
-  //   this.props.navigation.replace('TabNavigator');
-  // };
+ 
 }
 
 const styles = StyleSheet.create({
